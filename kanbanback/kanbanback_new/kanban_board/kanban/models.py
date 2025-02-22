@@ -43,7 +43,7 @@ class Comments(models.Model):
 class Emp(models.Model):
     emp_id = models.AutoField(primary_key=True)
     empname = models.CharField(max_length=255, blank=True, null=True, unique=True)
-    pass_field = models.CharField(db_column='pass', max_length=255, blank=True, null=True)  # Field renamed because it was a Python reserved word.
+    pass_field = models.CharField(db_column='pass', max_length=255, blank=True, null=True)
 
     class Meta:
        
