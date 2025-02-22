@@ -18,6 +18,7 @@ const Register = ({ setAuthToken }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     const response = await fetch(`${API_BASE_URL}/kanban/api/register/`, {
       method: "POST",
       headers: {
@@ -25,23 +26,28 @@ const Register = ({ setAuthToken }) => {
       },
       body: JSON.stringify(formData),
     });
-
+  
     const data = await response.json();
-
+  
     if (response.ok) {
       alert("User registered successfully!");
-
-      if (data.token) {
-        localStorage.setItem("access_token", data.token);
-        setAuthToken(data.token);
+  
+      if (data.access_token && data.refresh_token) {
+        console.log("Access Token:", data.access_token);
+        console.log("Refresh Token:", data.refresh_token);  
+        localStorage.setItem("access_token", data.access_token);
+        localStorage.setItem("refresh_token", data.refresh_token);  
+        setAuthToken(data.access_token); 
         navigate("/dashboard");
       } else {
+        alert("Registration successful, but no token received. Please login.");
         navigate("/login");
       }
     } else {
       alert(data.error || "Registration failed");
     }
   };
+  
 
   return (
     <Box
