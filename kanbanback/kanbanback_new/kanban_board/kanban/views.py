@@ -13,6 +13,7 @@ import json
 import anthropic
 from django.db.models import Q
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 load_dotenv()
@@ -25,7 +26,7 @@ class CustomTokenRefreshView(TokenRefreshView):
     pass
 
 class RegisterView(APIView):
-    permission_classes = [AllowAny]  # Allow unauthenticated users to register
+    permission_classes = [AllowAny]  
 
     def post(self, request):
         username = request.data.get('username')
@@ -38,15 +39,16 @@ class RegisterView(APIView):
         if User.objects.filter(username=username).exists():
             return Response({'error': 'Username already taken'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Create user
         user = User.objects.create_user(username=username, password=password, email=email)
 
-        # Generate authentication token
-        token, _ = Token.objects.get_or_create(user=user)
+        
+        refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
 
         return Response({
             'message': 'User registered successfully',
-            'token': token.key  # Return the token
+            'access_token': access_token,
+            'refresh_token': str(refresh), 
         }, status=status.HTTP_201_CREATED)
 
 @csrf_exempt
@@ -269,7 +271,7 @@ class ColView2(APIView):
 
 class TaskView(APIView):
     permission_classes = [IsAuthenticated]
-    def get(self):
+    def get(self, request):
         not_started = Task.objects.filter(status='Not started').order_by('priority')
         in_progress = Task.objects.filter(status='In progress').order_by('priority')
         completed = Task.objects.filter(status='Completed').order_by('priority')
@@ -289,9 +291,7 @@ class TaskView(APIView):
         serialized = TaskSerializer(data=request.data)
         if serialized.is_valid():
             serialized.save()
-            return Response(serialized.data, status=status.HTTP_201_CREATED)
-        else:
-            print(serialized.errors)
+            return Response(serialized.data, status=status.HTTP_201_CREATED)        
         return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class TaskView2(APIView):    
@@ -308,7 +308,7 @@ class TaskView2(APIView):
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
             
     
-    def delete(self, id):  
+    def delete(self, request, id):  
         try:
             task = Task.objects.get(task_id=id)
             task.delete()
