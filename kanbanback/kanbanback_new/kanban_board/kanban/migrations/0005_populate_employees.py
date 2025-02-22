@@ -3,7 +3,7 @@
 from django.db import migrations
 
 def populate_emp_table(apps, schema_editor):
-    Emp = apps.get_model("your_app_name", "Emp")
+    Emp = apps.get_model("kanban", "Emp")
 
     employees = [
         Emp(empname="Alice Johnson", pass_field="password123"),
