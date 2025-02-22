@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const Chatbot = () => {
   const [query, setQuery] = useState("");
   const [messages, setMessages] = useState([]);
@@ -25,7 +27,7 @@ const Chatbot = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/kanban/chatbot/", {
+      const response = await fetch(`${API_BASE_URL}/kanban/chatbot/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query }),
