@@ -14,6 +14,7 @@ import axios from "axios";
 import "./styles.css";
 import Column from "./Column";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function ColumnContainer() {
   const [task, setTask] = useState({}); 
   const [selectedCard, setSelectedCard] = useState(null);
@@ -37,7 +38,7 @@ function ColumnContainer() {
   const refreshTasks = async () => {
     try {
       let token = localStorage.getItem("access_token");
-      const response = await axios.get("http://127.0.0.1:8000/kanban/tasks/get", {
+      const response = await axios.get(`${API_BASE_URL}/kanban/tasks/get`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTask(response.data); 
@@ -57,7 +58,7 @@ function ColumnContainer() {
         }
 
         const response = await axios.get(
-          "http://127.0.0.1:8000/kanban/tasks/get/",
+          `${API_BASE_URL}/kanban/tasks/get/`,
           {
             headers: {
               Authorization: `Bearer ${token}`, 

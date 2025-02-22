@@ -3,6 +3,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { Box, Input, Button, Text, Heading, VStack } from "@chakra-ui/react";
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const Login = ({ setAuthToken }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -14,7 +16,7 @@ const Login = ({ setAuthToken }) => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/kanban/api/token/",
+        `${API_BASE_URL}/kanban/api/token/`,
         { username, password }
       );
 

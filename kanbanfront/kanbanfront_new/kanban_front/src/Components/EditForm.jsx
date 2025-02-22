@@ -15,6 +15,8 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const EditForm = ({ selectedCard,setSelectedCard,refreshTasks, onClose }) => {
   const toast = useToast();
 
@@ -51,7 +53,7 @@ const EditForm = ({ selectedCard,setSelectedCard,refreshTasks, onClose }) => {
         return null; 
       }
   
-      const response = await axios.post('http://127.0.0.1:8000/api/token/refresh/', {
+      const response = await axios.post(`${API_BASE_URL}/api/token/refresh/`, {
         refresh: refresh_token
       });
   
@@ -91,7 +93,7 @@ const EditForm = ({ selectedCard,setSelectedCard,refreshTasks, onClose }) => {
 
     try {
       const response = await axios.put(
-        `http://127.0.0.1:8000/kanban/tasks/put/${selectedCard.task_id}/`,
+        `${API_BASE_URL}/kanban/tasks/put/${selectedCard.task_id}/`,
         formData,
         {
           headers: {
@@ -102,9 +104,9 @@ const EditForm = ({ selectedCard,setSelectedCard,refreshTasks, onClose }) => {
       );
 
       console.log("Update Response:", response.data);
-      setSelectedCard(response.data); //  Update selectedCard in parent
-      refreshTasks(); // Refresh task list
-      onClose(); // Close modal
+      setSelectedCard(response.data); 
+      refreshTasks();
+      onClose();
 
       toast({
         title: "Task updated successfully!",
@@ -144,7 +146,7 @@ const EditForm = ({ selectedCard,setSelectedCard,refreshTasks, onClose }) => {
   
     try {
       const response = await axios.delete(
-        `http://127.0.0.1:8000/kanban/tasks/delete/${selectedCard.task_id}/`,
+        `${API_BASE_URL}/kanban/tasks/delete/${selectedCard.task_id}/`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -155,9 +157,9 @@ const EditForm = ({ selectedCard,setSelectedCard,refreshTasks, onClose }) => {
   
       console.log("Delete Response:", response.data);
   
-      // 🔥 Remove the deleted task from the UI immediately
+      
       if (typeof refreshTasks === "function") {
-        refreshTasks(); // Calls API again to fetch updated tasks list
+        refreshTasks(); 
       } else if (typeof setTasks === "function") {
         setTasks((prevTasks) => prevTasks.filter((task) => task.task_id !== selectedCard.task_id));
       }
@@ -169,16 +171,16 @@ const EditForm = ({ selectedCard,setSelectedCard,refreshTasks, onClose }) => {
         isClosable: true,
       });
   
-      onClose(); // Close modal if task was being edited
+      onClose();       
   
     } catch (error) {
       if (error.response?.status === 401 && error.response?.data?.code === "token_not_valid") {
         try {
-          const newToken = await refreshToken();
+          const newToken = await refreshToken();        
           
-          // Retry delete with new token
+          
           await axios.delete(
-            `http://127.0.0.1:8000/kanban/tasks/delete/${selectedCard.task_id}/`,
+            `${API_BASE_URL}/kanban/tasks/delete/${selectedCard.task_id}/`,
             {
               headers: {
                 Authorization: `Bearer ${newToken}`,

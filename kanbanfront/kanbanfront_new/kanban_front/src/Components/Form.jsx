@@ -19,6 +19,7 @@ import {
 
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const Form = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -56,12 +57,11 @@ const Form = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Get the token from localStorage
     const token = localStorage.getItem('access_token');
     
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/kanban/tasks/get/",
+        `${API_BASE_URL}/kanban/tasks/get/`,
         formData,
         {
           headers: {

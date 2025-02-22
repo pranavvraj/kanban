@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Box, Input, Button, Text, Heading, VStack } from "@chakra-ui/react";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Register = ({ setAuthToken }) => {
   const [formData, setFormData] = useState({
@@ -17,7 +18,7 @@ const Register = ({ setAuthToken }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://127.0.0.1:8000/kanban/api/register/", {
+    const response = await fetch(`${API_BASE_URL}/kanban/api/register/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
