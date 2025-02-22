@@ -1,0 +1,4 @@
+/* selecting child from parent */
+.taskbox:hover .taskname {
+  height: auto;
+}
