@@ -32,9 +32,7 @@ const Register = ({ setAuthToken }) => {
     if (response.ok) {
       alert("User registered successfully!");
   
-      if (data.access_token && data.refresh_token) {
-        console.log("Access Token:", data.access_token);
-        console.log("Refresh Token:", data.refresh_token);  
+      if (data.access_token && data.refresh_token) { 
         localStorage.setItem("access_token", data.access_token);
         localStorage.setItem("refresh_token", data.refresh_token);  
         setAuthToken(data.access_token); 

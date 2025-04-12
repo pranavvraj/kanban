@@ -60,7 +60,6 @@ const EditForm = ({ selectedCard,setSelectedCard,refreshTasks, onClose }) => {
       const new_access_token = response.data.access;
       localStorage.setItem('access_token', new_access_token);
       
-      console.log("Access token refreshed successfully");
       return new_access_token;
     } catch (error) {
       console.error("Token refresh failed:", error.response?.data || error.message);
@@ -103,7 +102,6 @@ const EditForm = ({ selectedCard,setSelectedCard,refreshTasks, onClose }) => {
         }
       );
 
-      console.log("Update Response:", response.data);
       setSelectedCard(response.data); 
       refreshTasks();
       onClose();
@@ -154,9 +152,7 @@ const EditForm = ({ selectedCard,setSelectedCard,refreshTasks, onClose }) => {
           },
         }
       );
-  
-      console.log("Delete Response:", response.data);
-  
+    
       
       if (typeof refreshTasks === "function") {
         refreshTasks(); 

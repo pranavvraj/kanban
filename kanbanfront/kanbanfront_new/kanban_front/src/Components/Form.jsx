@@ -71,14 +71,12 @@ const Form = () => {
         }
       );
 
-      console.log(response.data);
       window.location.reload();
       alert("Task created successfully");
     } catch (error) {
       if (error.response && error.response.status === 401) {
         alert("You are not authorized. Please login again.");
       } else {
-        console.log(error);
         alert("Error creating task");
       }
     }
